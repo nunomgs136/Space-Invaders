@@ -2,15 +2,27 @@ using UnityEngine;
 
 public class gameManager : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public static gameManager instance;
+
+    public int pontos = 0;
+
+    void Awake()
     {
-        
+        instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void InimigoDestruido()
     {
-        
+        pontos++;
+        Debug.Log("Pontos: " + pontos);
+    }
+
+    void OnGUI()
+    {
+        GUIStyle estilo = new GUIStyle(GUI.skin.label);
+        estilo.fontSize = 30;
+        estilo.normal.textColor = Color.white;
+
+        GUI.Label(new Rect(Screen.width - 200, 20, 300, 40), "Pontos: " + pontos, estilo);
     }
 }
