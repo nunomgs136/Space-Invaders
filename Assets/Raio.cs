@@ -24,11 +24,18 @@ void OnTriggerEnter2D(Collider2D col)
     }
 
     if (!tiroInimigo && col.CompareTag("NaveMae"))
+{
+    Debug.Log("Acertou NaveMae");
+
+    NaveMae nave = col.GetComponent<NaveMae>();
+
+    if (nave != null)
     {
-    Debug.Log("BATEU NA MÃE, QUE COISA FEIA!");
-    col.GetComponent<NaveMae>().AcertouNaveMae();
-    Destroy(gameObject);
+        nave.AcertouNaveMae();
     }
+
+    Destroy(gameObject);
+}
 
     if (tiroInimigo && col.CompareTag("Player"))
     {
@@ -39,5 +46,10 @@ void OnTriggerEnter2D(Collider2D col)
     // Destrói o raio ao sair pela parede superior
     if (!tiroInimigo && col.CompareTag("TopWall"))
         Destroy(gameObject);
+}
+
+void OnCollisionEnter2D(Collision2D col)
+{
+    Debug.Log("COLIDIU COM: " + col.gameObject.name);
 }
 }
