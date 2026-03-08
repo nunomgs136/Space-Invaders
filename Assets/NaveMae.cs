@@ -5,9 +5,12 @@ public class NaveMae : MonoBehaviour
     public float velocidade = 5f;
     public int pontosBonus = 10;
 
-    void Update()
+    private Rigidbody2D rb;
+
+    void Start()
     {
-        transform.Translate(Vector3.right * velocidade * Time.deltaTime);
+        rb = GetComponent<Rigidbody2D>();
+        rb.linearVelocity = Vector2.right * velocidade;
     }
 
     public void AcertouNaveMae()

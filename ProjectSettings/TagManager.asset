@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Invaders
   - Laser
+  - Raio
+  - NaveMae
+  - TopWall
   layers:
   - Default
   - TransparentFX

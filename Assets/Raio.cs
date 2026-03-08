@@ -12,10 +12,10 @@ public class Raio : MonoBehaviour
         transform.Translate(direcao * velocidade * Time.deltaTime);
     }
 
-    void OnTriggerEnter2D(Collider2D col)
-    {
-       Debug.Log("Raio colidiu com: " + col.gameObject.name + " | Tag: " + col.gameObject.tag);
-         // Tiro do jogador
+void OnTriggerEnter2D(Collider2D col)
+{
+    //Debug.Log("Raio colidiu com: " + col.gameObject.name + " | Tag: " + col.gameObject.tag);
+
     if (!tiroInimigo && col.CompareTag("Invaders"))
     {
         gameManager.instance.InimigoDestruido();
@@ -23,21 +23,21 @@ public class Raio : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // Tiro do jogador acertando a nave mãe
     if (!tiroInimigo && col.CompareTag("NaveMae"))
     {
-        Debug.Log("Acertou a NaveMae!");
-        col.GetComponent<NaveMae>().AcertouNaveMae();
-        Destroy(gameObject);
+    Debug.Log("BATEU NA MÃE, QUE COISA FEIA!");
+    col.GetComponent<NaveMae>().AcertouNaveMae();
+    Destroy(gameObject);
     }
 
-    // Tiro do inimigo
     if (tiroInimigo && col.CompareTag("Player"))
     {
         gameManager.instance.PlayerAtingido();
         Destroy(gameObject);
     }
 
-        
-    }
+    // Destrói o raio ao sair pela parede superior
+    if (!tiroInimigo && col.CompareTag("TopWall"))
+        Destroy(gameObject);
+}
 }
