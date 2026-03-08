@@ -8,45 +8,51 @@ public class gameManager : MonoBehaviour
 
     public int pontos = 0;
     public int vidas = 3;
-
     public bool venceu = false;
-
-    public int inimigosRestantes = 20;
+    public int inimigosRestantes = 0;
 
     private TMP_Text textoPontos;
     private TMP_Text textoVidas;
 
-void Awake()
-{
-    if (instance != null && instance != this)
+    void Awake()
     {
-        Destroy(gameObject);
-        return;
+        if (instance != null && instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        instance = this;
+        DontDestroyOnLoad(gameObject);
+
+        // Registra o método para ser chamado toda vez que uma cena carregar
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    instance = this;
-    DontDestroyOnLoad(gameObject); // ← sobrevive à troca de cena!
-}
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // Só busca os textos na cena do jogo, não na TelaFinal
+        if (scene.name == "fase1")
+        {
+            textoPontos = GameObject.Find("ScoreText")?.GetComponent<TMP_Text>();
+            textoVidas  = GameObject.Find("VidasText")?.GetComponent<TMP_Text>();
+            inimigosRestantes = GameObject.FindGameObjectsWithTag("Invaders").Length;
+            AtualizarUI();
+        }
+    }
 
-void Start()
-{
-    // Rebusca os textos na cena atual (necessário após trocar de cena)
-    textoPontos = GameObject.Find("ScoreText").GetComponent<TMP_Text>();
-    textoVidas  = GameObject.Find("VidasText").GetComponent<TMP_Text>();
-
-    inimigosRestantes = GameObject.FindGameObjectsWithTag("Invaders").Length;
-
-    AtualizarUI();
-}
+    void OnDestroy()
+    {
+        // Boa prática: desregistrar o evento ao destruir
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 
     public void InimigoDestruido()
     {
         pontos++;
         inimigosRestantes--;
-
         textoPontos.text = "Pontos: " + pontos;
 
-        // venceu o jogo
         if (inimigosRestantes <= 0)
         {
             venceu = true;
@@ -68,7 +74,7 @@ void Start()
 
     public void AtualizarUI()
     {
-        textoPontos.text = "Pontos: " + pontos;
-        textoVidas.text  = "Vidas: " + vidas;
+        if (textoPontos != null) textoPontos.text = "Pontos: " + pontos;
+        if (textoVidas  != null) textoVidas.text  = "Vidas: "  + vidas;
     }
 }
