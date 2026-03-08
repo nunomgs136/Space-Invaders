@@ -1,28 +1,48 @@
 using UnityEngine;
+using TMPro;
 
 public class gameManager : MonoBehaviour
 {
     public static gameManager instance;
 
     public int pontos = 0;
+    public int vidas = 3;
+
+    private TMP_Text textoPontos;
+    private TMP_Text textoVidas;
 
     void Awake()
     {
         instance = this;
     }
 
+    void Start()
+    {
+        // Busca os textos na cena pelo nome
+        textoPontos = GameObject.Find("ScoreText").GetComponent<TMP_Text>();
+        textoVidas  = GameObject.Find("VidasText").GetComponent<TMP_Text>();
+
+        AtualizarUI();
+    }
+
     public void InimigoDestruido()
     {
         pontos++;
-        Debug.Log("Pontos: " + pontos);
+        textoPontos.text = "Pontos: " + pontos;
     }
 
-    void OnGUI()
+    public void PlayerAtingido()
     {
-        GUIStyle estilo = new GUIStyle(GUI.skin.label);
-        estilo.fontSize = 30;
-        estilo.normal.textColor = Color.white;
+        vidas--;
+        textoVidas.text = "Vidas: " + vidas;
 
-        GUI.Label(new Rect(Screen.width - 200, 20, 300, 40), "Pontos: " + pontos, estilo);
+        if (vidas <= 0)
+            Debug.Log("Game Over");
+    }
+
+    public void AtualizarUI()
+    {
+        textoPontos.text = "Pontos: " + pontos;
+        textoVidas.text  = "Vidas: " + vidas;
     }
 }

@@ -7,7 +7,6 @@ public class player : MonoBehaviour
     public KeyCode shootKey = KeyCode.Space;
 
     public float velocidade = 10f;
-
     // Prefab do raio
     public GameObject raioPrefab;
 
